@@ -7,26 +7,26 @@ public class FestivoDTO {
     
     private Long id;
     
-    @NotNull(message = "El ID del país es obligatorio")
+    @NotNull(message = "El ID del país es obligatorio.")
     private Long paisId;
     
     private String paisNombre;
     
     @NotBlank(message = "El nombre del festivo es obligatorio")
-    @Size(max = 100, message = "El nombre del festivo no puede exceder 100 caracteres")
+    @Size(max = 100, message = "El nombre del festivo no puede exceder 100 caracteres.")
     private String nombre;
     
-    @Min(value = 1, message = "El día debe estar entre 1 y 31")
-    @Max(value = 31, message = "El día debe estar entre 1 y 31")
+    @Min(value = 1, message = "El día debe estar entre 1 y 31.")
+    @Max(value = 31, message = "El día debe estar entre 1 y 31.")
     private Integer dia;
     
-    @Min(value = 1, message = "El mes debe estar entre 1 y 12")
-    @Max(value = 12, message = "El mes debe estar entre 1 y 12")
+    @Min(value = 1, message = "El mes debe estar entre 1 y 12.")
+    @Max(value = 12, message = "El mes debe estar entre 1 y 12.")
     private Integer mes;
     
     private Integer diasPascua;
     
-    @NotNull(message = "El ID del tipo de festivo es obligatorio")
+    @NotNull(message = "El ID del tipo de festivo es obligatorio.")
     private Long tipoFestivoId;
     
     private String tipoFestivoNombre;
@@ -35,89 +35,89 @@ public class FestivoDTO {
     
     public FestivoDTO() {}
     
-    public FestivoDTO(String nombre, Long paisId, Long tipoFestivoId) {
+    public FestivoDTO(final String nombre, final Long paisId, final Long tipoFestivoId) {
         this.nombre = nombre;
         this.paisId = paisId;
         this.tipoFestivoId = tipoFestivoId;
     }
     
     public Long getId() {
-        return id;
+        return this.id;
     }
     
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
     
     public Long getPaisId() {
-        return paisId;
+        return this.paisId;
     }
     
-    public void setPaisId(Long paisId) {
+    public void setPaisId(final Long paisId) {
         this.paisId = paisId;
     }
     
     public String getPaisNombre() {
-        return paisNombre;
+        return this.paisNombre;
     }
     
-    public void setPaisNombre(String paisNombre) {
+    public void setPaisNombre(final String paisNombre) {
         this.paisNombre = paisNombre;
     }
     
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
     
-    public void setNombre(String nombre) {
+    public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
     
     public Integer getDia() {
-        return dia;
+        return this.dia;
     }
     
-    public void setDia(Integer dia) {
+    public void setDia(final Integer dia) {
         this.dia = dia;
     }
     
     public Integer getMes() {
-        return mes;
+        return this.mes;
     }
     
-    public void setMes(Integer mes) {
+    public void setMes(final Integer mes) {
         this.mes = mes;
     }
     
     public Integer getDiasPascua() {
-        return diasPascua;
+        return this.diasPascua;
     }
     
-    public void setDiasPascua(Integer diasPascua) {
+    public void setDiasPascua(final Integer diasPascua) {
         this.diasPascua = diasPascua;
     }
     
     public Long getTipoFestivoId() {
-        return tipoFestivoId;
+        return this.tipoFestivoId;
     }
     
-    public void setTipoFestivoId(Long tipoFestivoId) {
+    public void setTipoFestivoId(final Long tipoFestivoId) {
         this.tipoFestivoId = tipoFestivoId;
     }
     
     public String getTipoFestivoNombre() {
-        return tipoFestivoNombre;
+        return this.tipoFestivoNombre;
     }
     
-    public void setTipoFestivoNombre(String tipoFestivoNombre) {
+    public void setTipoFestivoNombre(final String tipoFestivoNombre) {
         this.tipoFestivoNombre = tipoFestivoNombre;
     }
     
     public LocalDate getFechaCelebracion() {
-        return fechaCelebracion;
+        return this.fechaCelebracion;
     }
     
-    public void setFechaCelebracion(LocalDate fechaCelebracion) {
+    public void setFechaCelebracion(final LocalDate fechaCelebracion) {
         this.fechaCelebracion = fechaCelebracion;
     }
 }
