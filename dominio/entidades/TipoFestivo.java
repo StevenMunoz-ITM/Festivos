@@ -21,14 +21,12 @@ public class TipoFestivo {
     @OneToMany(mappedBy = "tipoFestivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Festivo> festivos;
     
-    // Constructores
     public TipoFestivo() {}
     
     public TipoFestivo(String tipo) {
         this.tipo = tipo;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }

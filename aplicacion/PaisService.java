@@ -61,7 +61,6 @@ public class PaisService implements IPaisService {
         Pais paisExistente = paisRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("País no encontrado con ID: " + id));
         
-        // Verificar si el nuevo nombre ya existe en otro país
         if (!paisExistente.getNombre().equalsIgnoreCase(paisDTO.getNombre()) &&
             paisRepository.existsByNombreIgnoreCase(paisDTO.getNombre())) {
             throw new IllegalArgumentException("Ya existe un país con el nombre: " + paisDTO.getNombre());
@@ -92,7 +91,6 @@ public class PaisService implements IPaisService {
         return paisRepository.existsByNombreIgnoreCase(nombre);
     }
     
-    // Métodos adicionales para compatibilidad con controladores que necesiten entidades
     
     @Transactional(readOnly = true)
     public Optional<Pais> obtenerEntidadPorId(Long id) {

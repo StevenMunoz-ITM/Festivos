@@ -11,7 +11,6 @@ public class TipoFestivoDTO {
     @Size(max = 100, message = "El tipo de festivo no puede exceder 100 caracteres")
     private String tipo;
     
-    // Constructores
     public TipoFestivoDTO() {}
     
     public TipoFestivoDTO(String tipo) {
@@ -23,7 +22,6 @@ public class TipoFestivoDTO {
         this.tipo = tipo;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }

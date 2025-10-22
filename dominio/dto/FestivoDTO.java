@@ -31,10 +31,8 @@ public class FestivoDTO {
     
     private String tipoFestivoNombre;
     
-    // Campo calculado para mostrar la fecha de celebración
     private LocalDate fechaCelebracion;
     
-    // Constructores
     public FestivoDTO() {}
     
     public FestivoDTO(String nombre, Long paisId, Long tipoFestivoId) {
@@ -43,7 +41,6 @@ public class FestivoDTO {
         this.tipoFestivoId = tipoFestivoId;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }

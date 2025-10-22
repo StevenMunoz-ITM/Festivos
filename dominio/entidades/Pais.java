@@ -21,14 +21,12 @@ public class Pais {
     @OneToMany(mappedBy = "pais", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Festivo> festivos;
     
-    // Constructores
     public Pais() {}
     
     public Pais(String nombre) {
         this.nombre = nombre;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }

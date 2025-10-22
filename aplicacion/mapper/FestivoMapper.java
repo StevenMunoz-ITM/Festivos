@@ -55,14 +55,12 @@ public class FestivoMapper {
         festivo.setMes(festivoDTO.getMes());
         festivo.setDiasPascua(festivoDTO.getDiasPascua());
         
-        // Buscar y asignar el país
         if (festivoDTO.getPaisId() != null) {
             Pais pais = paisRepository.findById(festivoDTO.getPaisId())
                     .orElseThrow(() -> new IllegalArgumentException("País no encontrado con ID: " + festivoDTO.getPaisId()));
             festivo.setPais(pais);
         }
         
-        // Buscar y asignar el tipo de festivo
         if (festivoDTO.getTipoFestivoId() != null) {
             TipoFestivo tipoFestivo = tipoFestivoRepository.findById(festivoDTO.getTipoFestivoId())
                     .orElseThrow(() -> new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + festivoDTO.getTipoFestivoId()));

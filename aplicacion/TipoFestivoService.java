@@ -61,7 +61,6 @@ public class TipoFestivoService implements ITipoFestivoService {
         TipoFestivo tipoFestivoExistente = tipoFestivoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + id));
         
-        // Verificar si el nuevo tipo ya existe en otro registro
         if (!tipoFestivoExistente.getTipo().equalsIgnoreCase(tipoFestivoDTO.getTipo()) &&
             tipoFestivoRepository.existsByTipoIgnoreCase(tipoFestivoDTO.getTipo())) {
             throw new IllegalArgumentException("Ya existe un tipo de festivo con el tipo: " + tipoFestivoDTO.getTipo());
@@ -92,7 +91,6 @@ public class TipoFestivoService implements ITipoFestivoService {
         return tipoFestivoRepository.existsByTipoIgnoreCase(tipo);
     }
     
-    // Métodos adicionales para compatibilidad con controladores que necesiten entidades
     
     @Transactional(readOnly = true)
     public Optional<TipoFestivo> obtenerEntidadPorId(Long id) {

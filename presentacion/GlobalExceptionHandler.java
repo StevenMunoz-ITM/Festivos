@@ -77,7 +77,6 @@ public class GlobalExceptionHandler {
             this.validationErrors = validationErrors;
         }
 
-        // Getters y Setters
         public int getStatus() {
             return status;
         }

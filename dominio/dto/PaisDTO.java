@@ -11,7 +11,6 @@ public class PaisDTO {
     @Size(max = 100, message = "El nombre del país no puede exceder 100 caracteres")
     private String nombre;
     
-    // Constructores
     public PaisDTO() {}
     
     public PaisDTO(String nombre) {
@@ -23,7 +22,6 @@ public class PaisDTO {
         this.nombre = nombre;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }

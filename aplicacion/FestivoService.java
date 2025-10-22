@@ -146,7 +146,6 @@ public class FestivoService implements IFestivoService {
     @Override
     @Transactional(readOnly = true)
     public boolean esFestivo(LocalDate fecha, Long paisId) {
-        // Obtener todos los festivos del país
         List<Festivo> festivosDelPais = festivoRepository.findByPaisId(paisId);
         
         for (Festivo festivo : festivosDelPais) {
@@ -162,19 +161,15 @@ public class FestivoService implements IFestivoService {
     public LocalDate calcularFechaFestivo(Festivo festivo, int año) {
         LocalDate fechaBase;
         
-        // Determinar la fecha base según el tipo de festivo
         if (festivo.getDia() != null && festivo.getMes() != null) {
-            // Festivo de fecha fija
             fechaBase = LocalDate.of(año, festivo.getMes(), festivo.getDia());
         } else if (festivo.getDiasPascua() != null) {
-            // Festivo basado en Pascua
             LocalDate pascua = calcularPascua(año);
             fechaBase = pascua.plusDays(festivo.getDiasPascua());
         } else {
-            return null; // Datos incompletos
+            return null;
         }
         
-        // Aplicar lógica de "Puente festivo" si corresponde
         String tipoFestivo = festivo.getTipoFestivo().getTipo();
         if (tipoFestivo.contains("Puente festivo")) {
             return trasladarAlSiguienteLunes(fechaBase);
@@ -184,12 +179,10 @@ public class FestivoService implements IFestivoService {
     }
 
     private LocalDate trasladarAlSiguienteLunes(LocalDate fecha) {
-        // Si ya es lunes, no se traslada
-        if (fecha.getDayOfWeek().getValue() == 1) { // 1 = lunes
+        if (fecha.getDayOfWeek().getValue() == 1) {
             return fecha;
         }
         
-        // Calcular días hasta el siguiente lunes
         int diasHastaLunes = 8 - fecha.getDayOfWeek().getValue();
         return fecha.plusDays(diasHastaLunes);
     }
@@ -204,40 +197,31 @@ public class FestivoService implements IFestivoService {
     }
 
     private LocalDate calcularPascua(int año) {
-        // Fórmula colombiana para calcular el Domingo de Ramos
         int a = año % 19;
         int b = año % 4;
         int c = año % 7;
         int d = (19 * a + 24) % 30;
         
-        // Calcular días después del 15 de marzo para el Domingo de Ramos
         int dias = d + (2 * b + 4 * c + 6 * d + 5) % 7;
         
-        // Fecha base: 15 de marzo
         LocalDate fechaBase = LocalDate.of(año, 3, 15);
         
-        // Sumar los días calculados para obtener Domingo de Ramos
         LocalDate domingoDeRamos = fechaBase.plusDays(dias);
         
-        // Domingo de Pascua es 7 días después del Domingo de Ramos
         return domingoDeRamos.plusDays(7);
     }
 
     @Override
     public LocalDate calcularDomingoDeRamos(int año) {
-        // Fórmula colombiana para calcular el Domingo de Ramos
         int a = año % 19;
         int b = año % 4;
         int c = año % 7;
         int d = (19 * a + 24) % 30;
         
-        // Calcular días después del 15 de marzo para el Domingo de Ramos
         int dias = d + (2 * b + 4 * c + 6 * d + 5) % 7;
         
-        // Fecha base: 15 de marzo
         LocalDate fechaBase = LocalDate.of(año, 3, 15);
         
-        // Sumar los días calculados para obtener Domingo de Ramos
         return fechaBase.plusDays(dias);
     }
 
@@ -250,7 +234,6 @@ public class FestivoService implements IFestivoService {
             throw new IllegalArgumentException("Tipo de festivo inválido o no existe");
         }
         
-        // Validar que tenga fecha fija O días de Pascua, pero no ambos
         boolean tieneFechaFija = festivo.getDia() != null && festivo.getMes() != null;
         boolean tieneDiasPascua = festivo.getDiasPascua() != null;
         
@@ -262,7 +245,6 @@ public class FestivoService implements IFestivoService {
             throw new IllegalArgumentException("Un festivo debe tener fecha fija o días de Pascua");
         }
         
-        // Validar fecha fija
         if (tieneFechaFija) {
             if (festivo.getDia() < 1 || festivo.getDia() > 31) {
                 throw new IllegalArgumentException("El día debe estar entre 1 y 31");
@@ -271,9 +253,8 @@ public class FestivoService implements IFestivoService {
                 throw new IllegalArgumentException("El mes debe estar entre 1 y 12");
             }
             
-            // Validar que la fecha sea válida
             try {
-                LocalDate.of(2024, festivo.getMes(), festivo.getDia()); // Año bisiest para validar
+                LocalDate.of(2024, festivo.getMes(), festivo.getDia());
             } catch (Exception e) {
                 throw new IllegalArgumentException("Fecha inválida: día " + festivo.getDia() + ", mes " + festivo.getMes());
             }

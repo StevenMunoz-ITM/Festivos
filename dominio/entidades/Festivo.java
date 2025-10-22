@@ -43,7 +43,6 @@ public class Festivo {
     @JoinColumn(name = "id_tipo", nullable = false)
     private TipoFestivo tipoFestivo;
     
-    // Constructores
     public Festivo() {}
     
     public Festivo(Pais pais, String nombre, Integer dia, Integer mes, Integer diasPascua, TipoFestivo tipoFestivo) {
@@ -55,7 +54,6 @@ public class Festivo {
         this.tipoFestivo = tipoFestivo;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }
