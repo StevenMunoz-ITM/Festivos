@@ -2,37 +2,22 @@ package festivos.api.aplicacion.mapper;
 
 import festivos.api.dominio.dto.PaisDTO;
 import festivos.api.dominio.entidades.Pais;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-public class PaisMapper {
+@Mapper(componentModel = "spring")
+public interface PaisMapper {
 
-    public PaisDTO toDTO(Pais pais) {
-        if (pais == null) return null;
-        
-        return new PaisDTO(pais.getId(), pais.getNombre());
-    }
+    PaisDTO toDTO(Pais pais);
 
-    public Pais toEntity(PaisDTO paisDTO) {
-        if (paisDTO == null) return null;
-        
-        Pais pais = new Pais(paisDTO.getNombre());
-        pais.setId(paisDTO.getId());
-        return pais;
-    }
+    @Mapping(target = "festivos", ignore = true)
+    Pais toEntity(PaisDTO paisDTO);
 
-    public List<PaisDTO> toDTOList(List<Pais> paises) {
-        return paises.stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-    }
+    List<PaisDTO> toDTOList(List<Pais> paises);
 
-    public void updateEntity(Pais pais, PaisDTO paisDTO) {
-        if (pais != null && paisDTO != null) {
-            pais.setNombre(paisDTO.getNombre());
-        }
-    }
+    @Mapping(target = "festivos", ignore = true)
+    void updateEntity(@MappingTarget Pais pais, PaisDTO paisDTO);
 }

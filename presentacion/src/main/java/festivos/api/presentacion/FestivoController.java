@@ -2,31 +2,26 @@ package festivos.api.presentacion;
 
 import festivos.api.dominio.dto.FestivoDTO;
 import festivos.api.aplicacion.FestivoService;
+import festivos.api.aplicacion.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/festivos")
 @CrossOrigin(origins = "*")
-public class FestivoController extends BaseController {
+public class FestivoController extends BaseController<FestivoDTO, Long> {
 
     @Autowired
     private FestivoService festivoService;
 
-    @GetMapping
-    public ResponseEntity<List<FestivoDTO>> obtenerTodos() {
-        return obtenerTodos(festivoService.obtenerTodos());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<FestivoDTO> obtenerPorId(@PathVariable Long id) {
-        return obtenerPorId(festivoService.obtenerPorId(id));
+    @Override
+    protected BaseService<?, FestivoDTO, Long> getService() {
+        return festivoService;
     }
 
     @GetMapping("/pais/{paisId}")
@@ -77,20 +72,5 @@ public class FestivoController extends BaseController {
     @GetMapping("/domingo-ramos")
     public ResponseEntity<LocalDate> obtenerDomingoDeRamos(@RequestParam int anio) {
         return ejecutarOperacionConManejadorErrores(() -> festivoService.calcularDomingoDeRamos(anio));
-    }
-
-    @PostMapping
-    public ResponseEntity<FestivoDTO> crear(@Valid @RequestBody FestivoDTO festivo) {
-        return crear(() -> festivoService.guardar(festivo));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<FestivoDTO> actualizar(@PathVariable Long id, @Valid @RequestBody FestivoDTO festivo) {
-        return actualizar(() -> festivoService.actualizar(id, festivo));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        return eliminar(() -> festivoService.eliminar(id));
     }
 }

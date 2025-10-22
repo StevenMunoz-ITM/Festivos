@@ -5,17 +5,17 @@ import festivos.api.dominio.dto.PaisDTO;
 import festivos.api.dominio.entidades.Pais;
 import festivos.api.infraestructura.repositorios.PaisRepository;
 import festivos.api.aplicacion.mapper.PaisMapper;
+import festivos.api.aplicacion.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional
-public class PaisService implements IPaisService {
+public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPaisService {
     
     @Autowired
     private PaisRepository paisRepository;
@@ -23,17 +23,42 @@ public class PaisService implements IPaisService {
     @Autowired
     private PaisMapper paisMapper;
 
+    @Autowired
+    private ValidationUtils validationUtils;
+
     @Override
-    @Transactional(readOnly = true)
-    public List<PaisDTO> obtenerTodos() {
-        return convertirListaADTO(paisRepository.findAll());
+    protected JpaRepository<Pais, Long> getRepository() {
+        return paisRepository;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Optional<PaisDTO> obtenerPorId(Long id) {
-        return paisRepository.findById(id)
-                .map(paisMapper::toDTO);
+    protected Object getMapper() {
+        return paisMapper;
+    }
+
+    @Override
+    protected PaisDTO mapToDTO(Pais entity) {
+        return paisMapper.toDTO(entity);
+    }
+
+    @Override
+    protected Pais mapToEntity(PaisDTO dto) {
+        return paisMapper.toEntity(dto);
+    }
+
+    @Override
+    protected List<PaisDTO> mapToDTOList(List<Pais> entities) {
+        return paisMapper.toDTOList(entities);
+    }
+
+    @Override
+    protected void updateEntityFromDTO(Pais entity, PaisDTO dto) {
+        paisMapper.updateEntity(entity, dto);
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "País";
     }
 
     @Override
@@ -46,50 +71,13 @@ public class PaisService implements IPaisService {
     @Override
     public PaisDTO guardar(PaisDTO paisDTO) {
         validarPaisUnico(paisDTO.getNombre(), null);
-        
-        Pais pais = paisMapper.toEntity(paisDTO);
-        Pais paisGuardado = paisRepository.save(pais);
-        return paisMapper.toDTO(paisGuardado);
+        return super.guardar(paisDTO);
     }
 
     @Override
     public PaisDTO actualizar(Long id, PaisDTO paisDTO) {
-        Pais paisExistente = paisRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("País no encontrado con ID: " + id));
-        
         validarPaisUnico(paisDTO.getNombre(), id);
-        
-        paisExistente.setNombre(paisDTO.getNombre());
-        Pais paisActualizado = paisRepository.save(paisExistente);
-        return paisMapper.toDTO(paisActualizado);
-    }
-
-    private void validarPaisUnico(String nombre, Long idExcluir) {
-        Optional<Pais> paisExistente = paisRepository.findByNombreIgnoreCase(nombre);
-        if (paisExistente.isPresent() && 
-            (idExcluir == null || !paisExistente.get().getId().equals(idExcluir))) {
-            throw new IllegalArgumentException("Ya existe un país con el nombre: " + nombre);
-        }
-    }
-
-    private List<PaisDTO> convertirListaADTO(List<Pais> paises) {
-        return paises.stream()
-                .map(paisMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void eliminar(Long id) {
-        if (!paisRepository.existsById(id)) {
-            throw new IllegalArgumentException("País no encontrado con ID: " + id);
-        }
-        paisRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean existe(Long id) {
-        return paisRepository.existsById(id);
+        return super.actualizar(id, paisDTO);
     }
 
     @Override
@@ -98,9 +86,19 @@ public class PaisService implements IPaisService {
         return paisRepository.existsByNombreIgnoreCase(nombre);
     }
     
-    
     @Transactional(readOnly = true)
     public Optional<Pais> obtenerEntidadPorId(Long id) {
         return paisRepository.findById(id);
+    }
+
+    private void validarPaisUnico(String nombre, Long idExcluir) {
+        validationUtils.validarEntidadUnica(
+            paisRepository::findByNombreIgnoreCase,
+            nombre,
+            idExcluir,
+            "el nombre",
+            "un país",
+            Pais::getId
+        );
     }
 }

@@ -2,39 +2,18 @@ package festivos.api.aplicacion.mapper;
 
 import festivos.api.dominio.dto.TipoFestivoDTO;
 import festivos.api.dominio.entidades.TipoFestivo;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-public class TipoFestivoMapper {
+@Mapper(componentModel = "spring")
+public interface TipoFestivoMapper {
 
-    public TipoFestivoDTO toDTO(TipoFestivo tipoFestivo) {
-        if (tipoFestivo == null) {
-            return null;
-        }
-        
-        TipoFestivoDTO dto = new TipoFestivoDTO();
-        dto.setId(tipoFestivo.getId());
-        dto.setTipo(tipoFestivo.getTipo());
-        return dto;
-    }
+    TipoFestivoDTO toDTO(TipoFestivo tipoFestivo);
 
-    public TipoFestivo toEntity(TipoFestivoDTO tipoFestivoDTO) {
-        if (tipoFestivoDTO == null) {
-            return null;
-        }
-        
-        TipoFestivo tipoFestivo = new TipoFestivo();
-        tipoFestivo.setId(tipoFestivoDTO.getId());
-        tipoFestivo.setTipo(tipoFestivoDTO.getTipo());
-        return tipoFestivo;
-    }
+    @Mapping(target = "festivos", ignore = true)
+    TipoFestivo toEntity(TipoFestivoDTO tipoFestivoDTO);
 
-    public List<TipoFestivoDTO> toDTOList(List<TipoFestivo> tiposFestivo) {
-        return tiposFestivo.stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-    }
+    List<TipoFestivoDTO> toDTOList(List<TipoFestivo> tiposFestivo);
 }

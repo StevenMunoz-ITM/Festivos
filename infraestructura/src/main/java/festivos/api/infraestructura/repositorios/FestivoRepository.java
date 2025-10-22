@@ -1,11 +1,8 @@
 package festivos.api.infraestructura.repositorios;
 
 import festivos.api.dominio.entidades.Festivo;
-import festivos.api.dominio.entidades.Pais;
 import festivos.api.dominio.entidades.TipoFestivo;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,22 +10,16 @@ import java.util.List;
 @Repository
 public interface FestivoRepository extends JpaRepository<Festivo, Long> {
     
-    List<Festivo> findByPais(Pais pais);
-    
-    @Query("SELECT f FROM Festivo f WHERE f.pais.id = :paisId")
-    List<Festivo> findByPaisId(@Param("paisId") Long paisId);
-    
+    List<Festivo> findByPaisId(Long paisId);
     List<Festivo> findByTipoFestivo(TipoFestivo tipoFestivo);
-    
-    @Query("SELECT f FROM Festivo f WHERE f.dia = :dia AND f.mes = :mes")
-    List<Festivo> findByDiaAndMes(@Param("dia") Integer dia, @Param("mes") Integer mes);
-    
-    @Query("SELECT f FROM Festivo f WHERE f.pais.id = :paisId AND f.mes = :mes")
-    List<Festivo> findByPaisIdAndMes(@Param("paisId") Long paisId, @Param("mes") Integer mes);
-    
-    @Query("SELECT f FROM Festivo f WHERE f.diasPascua IS NOT NULL")
+    List<Festivo> findByDiaAndMes(Integer dia, Integer mes);
+    List<Festivo> findByPaisIdAndMes(Long paisId, Integer mes);
+    List<Festivo> findByMes(Integer mes);
     List<Festivo> findByDiasPascuaIsNotNull();
-    
-    @Query("SELECT f FROM Festivo f WHERE f.pais.id = :paisId AND f.diasPascua IS NOT NULL")
-    List<Festivo> findByPaisIdAndDiasPascuaIsNotNull(@Param("paisId") Long paisId);
+    List<Festivo> findByPaisIdAndDiasPascuaIsNotNull(Long paisId);
+    List<Festivo> findByDiasPascua(Integer diasPascua);
+    List<Festivo> findByPaisIdAndTipoFestivoId(Long paisId, Long tipoFestivoId);
+    List<Festivo> findByNombreContainingIgnoreCase(String nombre);
+    boolean existsByPaisIdAndNombreIgnoreCase(Long paisId, String nombre);
+    boolean existsByDiaAndMes(Integer dia, Integer mes);
 }

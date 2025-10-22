@@ -49,27 +49,68 @@ public class DataInitializer implements CommandLineRunner {
     private void crearFestivosColumbia(Pais colombia, TipoFestivo tipo1, TipoFestivo tipo2, 
                                      TipoFestivo tipo3, TipoFestivo tipo4) {
         
-        festivoRepository.save(new Festivo(colombia, "Año nuevo", 1, 1, null, tipo1));
-        festivoRepository.save(new Festivo(colombia, "Día del Trabajo", 1, 5, null, tipo1));
-        festivoRepository.save(new Festivo(colombia, "Independencia Colombia", 20, 7, null, tipo1));
-        festivoRepository.save(new Festivo(colombia, "Batalla de Boyacá", 7, 8, null, tipo1));
-        festivoRepository.save(new Festivo(colombia, "Inmaculada Concepción", 8, 12, null, tipo1));
-        festivoRepository.save(new Festivo(colombia, "Navidad", 25, 12, null, tipo1));
+        crearFestivosFijos(colombia, tipo1);
+        crearFestivosPuente(colombia, tipo2);
+        crearFestivosPascua(colombia, tipo3);
+        crearFestivosPascuaPuente(colombia, tipo4);
+    }
 
-        festivoRepository.save(new Festivo(colombia, "Santos Reyes", 6, 1, null, tipo2));
-        festivoRepository.save(new Festivo(colombia, "San José", 19, 3, null, tipo2));
-        festivoRepository.save(new Festivo(colombia, "San Pedro y San Pablo", 29, 6, null, tipo2));
-        festivoRepository.save(new Festivo(colombia, "Asunción de la Virgen", 15, 8, null, tipo2));
-        festivoRepository.save(new Festivo(colombia, "Día de la Raza", 12, 10, null, tipo2));
-        festivoRepository.save(new Festivo(colombia, "Todos los santos", 1, 11, null, tipo2));
-        festivoRepository.save(new Festivo(colombia, "Independencia de Cartagena", 11, 11, null, tipo2));
+    private void crearFestivosFijos(Pais colombia, TipoFestivo tipo) {
+        String[][] festivosFijos = {
+            {"Año nuevo", "1", "1"},
+            {"Día del Trabajo", "1", "5"},
+            {"Independencia Colombia", "20", "7"},
+            {"Batalla de Boyacá", "7", "8"},
+            {"Inmaculada Concepción", "8", "12"},
+            {"Navidad", "25", "12"}
+        };
+        
+        for (String[] festivo : festivosFijos) {
+            festivoRepository.save(new Festivo(colombia, festivo[0], 
+                Integer.parseInt(festivo[1]), Integer.parseInt(festivo[2]), null, tipo));
+        }
+    }
 
-        festivoRepository.save(new Festivo(colombia, "Jueves Santo", null, null, -3, tipo3));
-        festivoRepository.save(new Festivo(colombia, "Viernes Santo", null, null, -2, tipo3));
-        festivoRepository.save(new Festivo(colombia, "Domingo de Pascua", null, null, 0, tipo3));
+    private void crearFestivosPuente(Pais colombia, TipoFestivo tipo) {
+        String[][] festivosPuente = {
+            {"Santos Reyes", "6", "1"},
+            {"San José", "19", "3"},
+            {"San Pedro y San Pablo", "29", "6"},
+            {"Asunción de la Virgen", "15", "8"},
+            {"Día de la Raza", "12", "10"},
+            {"Todos los santos", "1", "11"},
+            {"Independencia de Cartagena", "11", "11"}
+        };
+        
+        for (String[] festivo : festivosPuente) {
+            festivoRepository.save(new Festivo(colombia, festivo[0], 
+                Integer.parseInt(festivo[1]), Integer.parseInt(festivo[2]), null, tipo));
+        }
+    }
 
-        festivoRepository.save(new Festivo(colombia, "Ascensión del Señor", null, null, 40, tipo4));
-        festivoRepository.save(new Festivo(colombia, "Corpus Christi", null, null, 61, tipo4));
-        festivoRepository.save(new Festivo(colombia, "Sagrado Corazón de Jesús", null, null, 68, tipo4));
+    private void crearFestivosPascua(Pais colombia, TipoFestivo tipo) {
+        String[][] festivosPascua = {
+            {"Jueves Santo", "-3"},
+            {"Viernes Santo", "-2"},
+            {"Domingo de Pascua", "0"}
+        };
+        
+        for (String[] festivo : festivosPascua) {
+            festivoRepository.save(new Festivo(colombia, festivo[0], 
+                null, null, Integer.parseInt(festivo[1]), tipo));
+        }
+    }
+
+    private void crearFestivosPascuaPuente(Pais colombia, TipoFestivo tipo) {
+        String[][] festivosPascuaPuente = {
+            {"Ascensión del Señor", "40"},
+            {"Corpus Christi", "61"},
+            {"Sagrado Corazón de Jesús", "68"}
+        };
+        
+        for (String[] festivo : festivosPascuaPuente) {
+            festivoRepository.save(new Festivo(colombia, festivo[0], 
+                null, null, Integer.parseInt(festivo[1]), tipo));
+        }
     }
 }

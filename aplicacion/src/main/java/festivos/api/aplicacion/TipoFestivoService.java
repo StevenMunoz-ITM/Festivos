@@ -5,17 +5,17 @@ import festivos.api.dominio.dto.TipoFestivoDTO;
 import festivos.api.dominio.entidades.TipoFestivo;
 import festivos.api.infraestructura.repositorios.TipoFestivoRepository;
 import festivos.api.aplicacion.mapper.TipoFestivoMapper;
+import festivos.api.aplicacion.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional
-public class TipoFestivoService implements ITipoFestivoService {
+public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO, Long> implements ITipoFestivoService {
     
     @Autowired
     private TipoFestivoRepository tipoFestivoRepository;
@@ -23,17 +23,42 @@ public class TipoFestivoService implements ITipoFestivoService {
     @Autowired
     private TipoFestivoMapper tipoFestivoMapper;
 
+    @Autowired
+    private ValidationUtils validationUtils;
+
     @Override
-    @Transactional(readOnly = true)
-    public List<TipoFestivoDTO> obtenerTodos() {
-        return convertirListaADTO(tipoFestivoRepository.findAll());
+    protected JpaRepository<TipoFestivo, Long> getRepository() {
+        return tipoFestivoRepository;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Optional<TipoFestivoDTO> obtenerPorId(Long id) {
-        return tipoFestivoRepository.findById(id)
-                .map(tipoFestivoMapper::toDTO);
+    protected Object getMapper() {
+        return tipoFestivoMapper;
+    }
+
+    @Override
+    protected TipoFestivoDTO mapToDTO(TipoFestivo entity) {
+        return tipoFestivoMapper.toDTO(entity);
+    }
+
+    @Override
+    protected TipoFestivo mapToEntity(TipoFestivoDTO dto) {
+        return tipoFestivoMapper.toEntity(dto);
+    }
+
+    @Override
+    protected List<TipoFestivoDTO> mapToDTOList(List<TipoFestivo> entities) {
+        return tipoFestivoMapper.toDTOList(entities);
+    }
+
+    @Override
+    protected void updateEntityFromDTO(TipoFestivo entity, TipoFestivoDTO dto) {
+        entity.setTipo(dto.getTipo());
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "Tipo de festivo";
     }
 
     @Override
@@ -46,50 +71,13 @@ public class TipoFestivoService implements ITipoFestivoService {
     @Override
     public TipoFestivoDTO guardar(TipoFestivoDTO tipoFestivoDTO) {
         validarTipoUnico(tipoFestivoDTO.getTipo(), null);
-        
-        TipoFestivo tipoFestivo = tipoFestivoMapper.toEntity(tipoFestivoDTO);
-        TipoFestivo tipoFestivoGuardado = tipoFestivoRepository.save(tipoFestivo);
-        return tipoFestivoMapper.toDTO(tipoFestivoGuardado);
+        return super.guardar(tipoFestivoDTO);
     }
 
     @Override
     public TipoFestivoDTO actualizar(Long id, TipoFestivoDTO tipoFestivoDTO) {
-        TipoFestivo tipoFestivoExistente = tipoFestivoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + id));
-        
         validarTipoUnico(tipoFestivoDTO.getTipo(), id);
-        
-        tipoFestivoExistente.setTipo(tipoFestivoDTO.getTipo());
-        TipoFestivo tipoFestivoActualizado = tipoFestivoRepository.save(tipoFestivoExistente);
-        return tipoFestivoMapper.toDTO(tipoFestivoActualizado);
-    }
-
-    private void validarTipoUnico(String tipo, Long idExcluir) {
-        Optional<TipoFestivo> tipoExistente = tipoFestivoRepository.findByTipoIgnoreCase(tipo);
-        if (tipoExistente.isPresent() && 
-            (idExcluir == null || !tipoExistente.get().getId().equals(idExcluir))) {
-            throw new IllegalArgumentException("Ya existe un tipo de festivo con el tipo: " + tipo);
-        }
-    }
-
-    private List<TipoFestivoDTO> convertirListaADTO(List<TipoFestivo> tiposFestivo) {
-        return tiposFestivo.stream()
-                .map(tipoFestivoMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void eliminar(Long id) {
-        if (!tipoFestivoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + id);
-        }
-        tipoFestivoRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean existe(Long id) {
-        return tipoFestivoRepository.existsById(id);
+        return super.actualizar(id, tipoFestivoDTO);
     }
 
     @Override
@@ -98,9 +86,19 @@ public class TipoFestivoService implements ITipoFestivoService {
         return tipoFestivoRepository.existsByTipoIgnoreCase(tipo);
     }
     
-    
     @Transactional(readOnly = true)
     public Optional<TipoFestivo> obtenerEntidadPorId(Long id) {
         return tipoFestivoRepository.findById(id);
+    }
+
+    private void validarTipoUnico(String tipo, Long idExcluir) {
+        validationUtils.validarEntidadUnica(
+            tipoFestivoRepository::findByTipoIgnoreCase,
+            tipo,
+            idExcluir,
+            "el tipo",
+            "un tipo de festivo",
+            TipoFestivo::getId
+        );
     }
 }
