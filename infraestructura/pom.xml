@@ -54,22 +54,11 @@
     
     <!-- Build Configuration -->
     <build>
-        <sourceDirectory>.</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                    <include>**/*.yml</include>
-                    <include>**/*.yaml</include>
-                </includes>
-                <excludes>
-                    <exclude>pom.xml</exclude>
-                    <exclude>target/**</exclude>
-                    <exclude>src/**</exclude>
-                </excludes>
-            </resource>
-        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 </project>

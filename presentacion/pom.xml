@@ -71,24 +71,13 @@
     
     <!-- Build Configuration -->
     <build>
-        <sourceDirectory>.</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                    <include>**/*.yml</include>
-                    <include>**/*.yaml</include>
-                </includes>
-                <excludes>
-                    <exclude>pom.xml</exclude>
-                    <exclude>target/**</exclude>
-                    <exclude>src/**</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            
             <!-- Spring Boot Maven Plugin - Solo en el módulo que contiene la aplicación principal -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
