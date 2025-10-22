@@ -26,9 +26,7 @@ public class PaisService implements IPaisService {
     @Override
     @Transactional(readOnly = true)
     public List<PaisDTO> obtenerTodos() {
-        return paisRepository.findAll().stream()
-                .map(paisMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(paisRepository.findAll());
     }
 
     @Override
@@ -47,9 +45,7 @@ public class PaisService implements IPaisService {
 
     @Override
     public PaisDTO guardar(PaisDTO paisDTO) {
-        if (paisRepository.existsByNombreIgnoreCase(paisDTO.getNombre())) {
-            throw new IllegalArgumentException("Ya existe un país con el nombre: " + paisDTO.getNombre());
-        }
+        validarPaisUnico(paisDTO.getNombre(), null);
         
         Pais pais = paisMapper.toEntity(paisDTO);
         Pais paisGuardado = paisRepository.save(pais);
@@ -61,14 +57,25 @@ public class PaisService implements IPaisService {
         Pais paisExistente = paisRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("País no encontrado con ID: " + id));
         
-        if (!paisExistente.getNombre().equalsIgnoreCase(paisDTO.getNombre()) &&
-            paisRepository.existsByNombreIgnoreCase(paisDTO.getNombre())) {
-            throw new IllegalArgumentException("Ya existe un país con el nombre: " + paisDTO.getNombre());
-        }
+        validarPaisUnico(paisDTO.getNombre(), id);
         
         paisExistente.setNombre(paisDTO.getNombre());
         Pais paisActualizado = paisRepository.save(paisExistente);
         return paisMapper.toDTO(paisActualizado);
+    }
+
+    private void validarPaisUnico(String nombre, Long idExcluir) {
+        Optional<Pais> paisExistente = paisRepository.findByNombreIgnoreCase(nombre);
+        if (paisExistente.isPresent() && 
+            (idExcluir == null || !paisExistente.get().getId().equals(idExcluir))) {
+            throw new IllegalArgumentException("Ya existe un país con el nombre: " + nombre);
+        }
+    }
+
+    private List<PaisDTO> convertirListaADTO(List<Pais> paises) {
+        return paises.stream()
+                .map(paisMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

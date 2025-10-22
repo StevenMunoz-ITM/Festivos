@@ -9,6 +9,9 @@ import festivos.api.infraestructura.repositorios.TipoFestivoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class FestivoMapper {
     
@@ -30,15 +33,8 @@ public class FestivoMapper {
         dto.setMes(festivo.getMes());
         dto.setDiasPascua(festivo.getDiasPascua());
         
-        if (festivo.getPais() != null) {
-            dto.setPaisId(festivo.getPais().getId());
-            dto.setPaisNombre(festivo.getPais().getNombre());
-        }
-        
-        if (festivo.getTipoFestivo() != null) {
-            dto.setTipoFestivoId(festivo.getTipoFestivo().getId());
-            dto.setTipoFestivoNombre(festivo.getTipoFestivo().getTipo());
-        }
+        mapearPais(festivo, dto);
+        mapearTipoFestivo(festivo, dto);
         
         return dto;
     }
@@ -55,18 +51,45 @@ public class FestivoMapper {
         festivo.setMes(festivoDTO.getMes());
         festivo.setDiasPascua(festivoDTO.getDiasPascua());
         
+        asignarPais(festivoDTO, festivo);
+        asignarTipoFestivo(festivoDTO, festivo);
+        
+        return festivo;
+    }
+
+    public List<FestivoDTO> toDTOList(List<Festivo> festivos) {
+        return festivos.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    private void mapearPais(Festivo festivo, FestivoDTO dto) {
+        if (festivo.getPais() != null) {
+            dto.setPaisId(festivo.getPais().getId());
+            dto.setPaisNombre(festivo.getPais().getNombre());
+        }
+    }
+
+    private void mapearTipoFestivo(Festivo festivo, FestivoDTO dto) {
+        if (festivo.getTipoFestivo() != null) {
+            dto.setTipoFestivoId(festivo.getTipoFestivo().getId());
+            dto.setTipoFestivoNombre(festivo.getTipoFestivo().getTipo());
+        }
+    }
+
+    private void asignarPais(FestivoDTO festivoDTO, Festivo festivo) {
         if (festivoDTO.getPaisId() != null) {
             Pais pais = paisRepository.findById(festivoDTO.getPaisId())
                     .orElseThrow(() -> new IllegalArgumentException("País no encontrado con ID: " + festivoDTO.getPaisId()));
             festivo.setPais(pais);
         }
-        
+    }
+
+    private void asignarTipoFestivo(FestivoDTO festivoDTO, Festivo festivo) {
         if (festivoDTO.getTipoFestivoId() != null) {
             TipoFestivo tipoFestivo = tipoFestivoRepository.findById(festivoDTO.getTipoFestivoId())
                     .orElseThrow(() -> new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + festivoDTO.getTipoFestivoId()));
             festivo.setTipoFestivo(tipoFestivo);
         }
-        
-        return festivo;
     }
 }

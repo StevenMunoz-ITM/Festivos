@@ -43,6 +43,7 @@ public class Festivo {
     @JoinColumn(name = "id_tipo", nullable = false)
     private TipoFestivo tipoFestivo;
     
+
     public Festivo() {}
     
     public Festivo(Pais pais, String nombre, Integer dia, Integer mes, Integer diasPascua, TipoFestivo tipoFestivo) {

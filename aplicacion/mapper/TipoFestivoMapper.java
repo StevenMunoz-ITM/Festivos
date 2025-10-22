@@ -4,6 +4,9 @@ import festivos.api.dominio.dto.TipoFestivoDTO;
 import festivos.api.dominio.entidades.TipoFestivo;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class TipoFestivoMapper {
 
@@ -27,5 +30,11 @@ public class TipoFestivoMapper {
         tipoFestivo.setId(tipoFestivoDTO.getId());
         tipoFestivo.setTipo(tipoFestivoDTO.getTipo());
         return tipoFestivo;
+    }
+
+    public List<TipoFestivoDTO> toDTOList(List<TipoFestivo> tiposFestivo) {
+        return tiposFestivo.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }

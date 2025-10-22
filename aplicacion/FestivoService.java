@@ -35,9 +35,7 @@ public class FestivoService implements IFestivoService {
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerTodos() {
-        return festivoRepository.findAll().stream()
-                .map(festivoMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(festivoRepository.findAll());
     }
 
     @Override
@@ -50,39 +48,35 @@ public class FestivoService implements IFestivoService {
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerPorPais(Long paisId) {
-        return festivoRepository.findByPaisId(paisId).stream()
-                .map(festivoMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(festivoRepository.findByPaisId(paisId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerPorFecha(Integer dia, Integer mes) {
-        return festivoRepository.findByDiaAndMes(dia, mes).stream()
-                .map(festivoMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(festivoRepository.findByDiaAndMes(dia, mes));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerPorPaisYMes(Long paisId, Integer mes) {
-        return festivoRepository.findByPaisIdAndMes(paisId, mes).stream()
-                .map(festivoMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(festivoRepository.findByPaisIdAndMes(paisId, mes));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerFestivosPascua() {
-        return festivoRepository.findByDiasPascuaIsNotNull().stream()
-                .map(festivoMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(festivoRepository.findByDiasPascuaIsNotNull());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerFestivosPascuaPorPais(Long paisId) {
-        return festivoRepository.findByPaisIdAndDiasPascuaIsNotNull(paisId).stream()
+        return convertirListaADTO(festivoRepository.findByPaisIdAndDiasPascuaIsNotNull(paisId));
+    }
+
+    private List<FestivoDTO> convertirListaADTO(List<Festivo> festivos) {
+        return festivos.stream()
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -90,49 +84,38 @@ public class FestivoService implements IFestivoService {
     @Override
     public FestivoDTO guardar(FestivoDTO festivoDTO) {
         Festivo festivo = festivoMapper.toEntity(festivoDTO);
-        validarFestivo(festivo);
-        Festivo festivoGuardado = festivoRepository.save(festivo);
+        Festivo festivoGuardado = guardarFestivo(festivo);
         return festivoMapper.toDTO(festivoGuardado);
     }
 
     @Override
     public FestivoDTO actualizar(Long id, FestivoDTO festivoDTO) {
-        Festivo festivoExistente = festivoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Festivo no encontrado con ID: " + id));
-        
         Festivo festivoActualizado = festivoMapper.toEntity(festivoDTO);
-        validarFestivo(festivoActualizado);
-        
-        festivoExistente.setPais(festivoActualizado.getPais());
-        festivoExistente.setNombre(festivoActualizado.getNombre());
-        festivoExistente.setDia(festivoActualizado.getDia());
-        festivoExistente.setMes(festivoActualizado.getMes());
-        festivoExistente.setDiasPascua(festivoActualizado.getDiasPascua());
-        festivoExistente.setTipoFestivo(festivoActualizado.getTipoFestivo());
-        
-        Festivo festivoSaved = festivoRepository.save(festivoExistente);
-        return festivoMapper.toDTO(festivoSaved);
+        Festivo festivoGuardado = actualizarFestivo(id, festivoActualizado);
+        return festivoMapper.toDTO(festivoGuardado);
     }
 
-    public Festivo guardar(Festivo festivo) {
+    public Festivo guardarFestivo(Festivo festivo) {
         validarFestivo(festivo);
         return festivoRepository.save(festivo);
     }
 
-    public Festivo actualizar(Long id, Festivo festivoActualizado) {
+    public Festivo actualizarFestivo(Long id, Festivo festivoActualizado) {
         Festivo festivoExistente = festivoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Festivo no encontrado con ID: " + id));
         
         validarFestivo(festivoActualizado);
-        
+        actualizarCamposFestivo(festivoExistente, festivoActualizado);
+        return festivoRepository.save(festivoExistente);
+    }
+
+    private void actualizarCamposFestivo(Festivo festivoExistente, Festivo festivoActualizado) {
         festivoExistente.setPais(festivoActualizado.getPais());
         festivoExistente.setNombre(festivoActualizado.getNombre());
         festivoExistente.setDia(festivoActualizado.getDia());
         festivoExistente.setMes(festivoActualizado.getMes());
         festivoExistente.setDiasPascua(festivoActualizado.getDiasPascua());
         festivoExistente.setTipoFestivo(festivoActualizado.getTipoFestivo());
-        
-        return festivoRepository.save(festivoExistente);
     }
 
     @Override
@@ -197,17 +180,7 @@ public class FestivoService implements IFestivoService {
     }
 
     private LocalDate calcularPascua(int año) {
-        int a = año % 19;
-        int b = año % 4;
-        int c = año % 7;
-        int d = (19 * a + 24) % 30;
-        
-        int dias = d + (2 * b + 4 * c + 6 * d + 5) % 7;
-        
-        LocalDate fechaBase = LocalDate.of(año, 3, 15);
-        
-        LocalDate domingoDeRamos = fechaBase.plusDays(dias);
-        
+        LocalDate domingoDeRamos = calcularDomingoDeRamos(año);
         return domingoDeRamos.plusDays(7);
     }
 

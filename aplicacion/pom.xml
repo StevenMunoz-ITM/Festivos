@@ -14,7 +14,7 @@
     <!-- Module Information -->
     <artifactId>aplicacion</artifactId>
     <packaging>jar</packaging>
-    <name>Aplicación - Servicios y Mappers</name>
+    <name>aplicacion</name>
     <description>Módulo de aplicación con implementaciones de servicios y mappers</description>
     
     <!-- Dependencies -->

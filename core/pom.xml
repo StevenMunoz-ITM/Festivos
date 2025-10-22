@@ -14,7 +14,7 @@
     <!-- Module Information -->
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
-    <name>Core - Interfaces y Puertos</name>
+    <name>core</name>
     <description>Módulo core con interfaces de servicios y puertos de la arquitectura hexagonal</description>
     
     <!-- Dependencies -->

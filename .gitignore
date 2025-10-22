@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Eclipse/VS Code compiled output ###
+bin/
+**/bin/
+
 ### STS ###
 .apt_generated
 .classpath

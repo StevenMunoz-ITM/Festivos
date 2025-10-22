@@ -4,85 +4,64 @@ import festivos.api.dominio.dto.FestivoDTO;
 import festivos.api.aplicacion.FestivoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/festivos")
 @CrossOrigin(origins = "*")
-public class FestivoController {
+public class FestivoController extends BaseController {
 
     @Autowired
     private FestivoService festivoService;
 
     @GetMapping
     public ResponseEntity<List<FestivoDTO>> obtenerTodos() {
-        List<FestivoDTO> festivos = festivoService.obtenerTodos();
-        return ResponseEntity.ok(festivos);
+        return obtenerTodos(festivoService.obtenerTodos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FestivoDTO> obtenerPorId(@PathVariable Long id) {
-        Optional<FestivoDTO> festivo = festivoService.obtenerPorId(id);
-        return festivo.map(ResponseEntity::ok)
-                     .orElse(ResponseEntity.notFound().build());
+        return obtenerPorId(festivoService.obtenerPorId(id));
     }
 
     @GetMapping("/pais/{paisId}")
     public ResponseEntity<List<FestivoDTO>> obtenerPorPais(@PathVariable Long paisId) {
-        List<FestivoDTO> festivos = festivoService.obtenerPorPais(paisId);
-        return ResponseEntity.ok(festivos);
+        return obtenerTodos(festivoService.obtenerPorPais(paisId));
     }
 
     @GetMapping("/fecha")
     public ResponseEntity<List<FestivoDTO>> obtenerPorFecha(@RequestParam Integer dia, @RequestParam Integer mes) {
-        try {
-            List<FestivoDTO> festivos = festivoService.obtenerPorFecha(dia, mes);
-            return ResponseEntity.ok(festivos);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ejecutarOperacionConManejadorErrores(() -> festivoService.obtenerPorFecha(dia, mes));
     }
 
     @GetMapping("/pais/{paisId}/mes/{mes}")
     public ResponseEntity<List<FestivoDTO>> obtenerPorPaisYMes(@PathVariable Long paisId, @PathVariable Integer mes) {
-        try {
-            List<FestivoDTO> festivos = festivoService.obtenerPorPaisYMes(paisId, mes);
-            return ResponseEntity.ok(festivos);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ejecutarOperacionConManejadorErrores(() -> festivoService.obtenerPorPaisYMes(paisId, mes));
     }
 
     @GetMapping("/pascua")
     public ResponseEntity<List<FestivoDTO>> obtenerFestivosPascua() {
-        List<FestivoDTO> festivos = festivoService.obtenerFestivosPascua();
-        return ResponseEntity.ok(festivos);
+        return obtenerTodos(festivoService.obtenerFestivosPascua());
     }
 
     @GetMapping("/pais/{paisId}/pascua")
     public ResponseEntity<List<FestivoDTO>> obtenerFestivosPascuaPorPais(@PathVariable Long paisId) {
-        List<FestivoDTO> festivos = festivoService.obtenerFestivosPascuaPorPais(paisId);
-        return ResponseEntity.ok(festivos);
+        return obtenerTodos(festivoService.obtenerFestivosPascuaPorPais(paisId));
     }
 
     @GetMapping("/es-festivo")
     public ResponseEntity<String> esFestivo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam Long paisId) {
-        try {
+        return ejecutarOperacionConManejadorErrores(() -> {
             boolean esFestivo = festivoService.esFestivo(fecha, paisId);
-            String mensaje = esFestivo ? "Es festivo" : "No es festivo";
-            return ResponseEntity.ok(mensaje);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+            return esFestivo ? "Es festivo" : "No es festivo";
+        });
     }
 
     @GetMapping("/{festivoId}/fecha-celebracion/{año}")
@@ -97,41 +76,21 @@ public class FestivoController {
 
     @GetMapping("/domingo-ramos")
     public ResponseEntity<LocalDate> obtenerDomingoDeRamos(@RequestParam int anio) {
-        try {
-            LocalDate domingoRamos = festivoService.calcularDomingoDeRamos(anio);
-            return ResponseEntity.ok(domingoRamos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ejecutarOperacionConManejadorErrores(() -> festivoService.calcularDomingoDeRamos(anio));
     }
 
     @PostMapping
     public ResponseEntity<FestivoDTO> crear(@Valid @RequestBody FestivoDTO festivo) {
-        try {
-            FestivoDTO festivoGuardado = festivoService.guardar(festivo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(festivoGuardado);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return crear(() -> festivoService.guardar(festivo));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<FestivoDTO> actualizar(@PathVariable Long id, @Valid @RequestBody FestivoDTO festivo) {
-        try {
-            FestivoDTO festivoActualizado = festivoService.actualizar(id, festivo);
-            return ResponseEntity.ok(festivoActualizado);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return actualizar(() -> festivoService.actualizar(id, festivo));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        try {
-            festivoService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return eliminar(() -> festivoService.eliminar(id));
     }
 }

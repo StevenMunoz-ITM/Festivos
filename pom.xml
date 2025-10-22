@@ -16,7 +16,7 @@
     <artifactId>api-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>API Festivos Colombianos - Parent</name>
+    <name>api</name>
     <description>API REST para gestión de festivos colombianos con Arquitectura Hexagonal Multi-Module</description>
     
     <!-- Módulos de la Arquitectura Hexagonal -->

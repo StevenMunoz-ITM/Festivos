@@ -14,7 +14,7 @@
     <!-- Module Information -->
     <artifactId>presentacion</artifactId>
     <packaging>jar</packaging>
-    <name>Presentación - Controllers REST</name>
+    <name>presentacion</name>
     <description>Módulo de presentación con controladores REST y configuración Spring Boot</description>
     
     <!-- Dependencies -->

@@ -14,7 +14,7 @@
     <!-- Module Information -->
     <artifactId>dominio</artifactId>
     <packaging>jar</packaging>
-    <name>Dominio - Entidades y DTOs</name>
+    <name>dominio</name>
     <description>Módulo de dominio con entidades JPA y DTOs para transferencia de datos</description>
     
     <!-- Dependencies -->

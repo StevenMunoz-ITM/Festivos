@@ -14,7 +14,7 @@
     <!-- Module Information -->
     <artifactId>infraestructura</artifactId>
     <packaging>jar</packaging>
-    <name>Infraestructura - Repositorios y Configuración</name>
+    <name>infraestructura</name>
     <description>Módulo de infraestructura con repositorios JPA y configuraciones</description>
     
     <!-- Dependencies -->

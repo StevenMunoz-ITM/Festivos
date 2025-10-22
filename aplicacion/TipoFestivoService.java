@@ -26,9 +26,7 @@ public class TipoFestivoService implements ITipoFestivoService {
     @Override
     @Transactional(readOnly = true)
     public List<TipoFestivoDTO> obtenerTodos() {
-        return tipoFestivoRepository.findAll().stream()
-                .map(tipoFestivoMapper::toDTO)
-                .collect(Collectors.toList());
+        return convertirListaADTO(tipoFestivoRepository.findAll());
     }
 
     @Override
@@ -47,9 +45,7 @@ public class TipoFestivoService implements ITipoFestivoService {
 
     @Override
     public TipoFestivoDTO guardar(TipoFestivoDTO tipoFestivoDTO) {
-        if (tipoFestivoRepository.existsByTipoIgnoreCase(tipoFestivoDTO.getTipo())) {
-            throw new IllegalArgumentException("Ya existe un tipo de festivo con el tipo: " + tipoFestivoDTO.getTipo());
-        }
+        validarTipoUnico(tipoFestivoDTO.getTipo(), null);
         
         TipoFestivo tipoFestivo = tipoFestivoMapper.toEntity(tipoFestivoDTO);
         TipoFestivo tipoFestivoGuardado = tipoFestivoRepository.save(tipoFestivo);
@@ -61,14 +57,25 @@ public class TipoFestivoService implements ITipoFestivoService {
         TipoFestivo tipoFestivoExistente = tipoFestivoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + id));
         
-        if (!tipoFestivoExistente.getTipo().equalsIgnoreCase(tipoFestivoDTO.getTipo()) &&
-            tipoFestivoRepository.existsByTipoIgnoreCase(tipoFestivoDTO.getTipo())) {
-            throw new IllegalArgumentException("Ya existe un tipo de festivo con el tipo: " + tipoFestivoDTO.getTipo());
-        }
+        validarTipoUnico(tipoFestivoDTO.getTipo(), id);
         
         tipoFestivoExistente.setTipo(tipoFestivoDTO.getTipo());
         TipoFestivo tipoFestivoActualizado = tipoFestivoRepository.save(tipoFestivoExistente);
         return tipoFestivoMapper.toDTO(tipoFestivoActualizado);
+    }
+
+    private void validarTipoUnico(String tipo, Long idExcluir) {
+        Optional<TipoFestivo> tipoExistente = tipoFestivoRepository.findByTipoIgnoreCase(tipo);
+        if (tipoExistente.isPresent() && 
+            (idExcluir == null || !tipoExistente.get().getId().equals(idExcluir))) {
+            throw new IllegalArgumentException("Ya existe un tipo de festivo con el tipo: " + tipo);
+        }
+    }
+
+    private List<TipoFestivoDTO> convertirListaADTO(List<TipoFestivo> tiposFestivo) {
+        return tiposFestivo.stream()
+                .map(tipoFestivoMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
