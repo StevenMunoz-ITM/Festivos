@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Parent Project -->
+    <parent>
+        <groupId>festivos</groupId>
+        <artifactId>api-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <!-- Module Information -->
+    <artifactId>aplicacion</artifactId>
+    <packaging>jar</packaging>
+    <name>Aplicación - Servicios y Mappers</name>
+    <description>Módulo de aplicación con implementaciones de servicios y mappers</description>
+    
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- Core module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        
+        <!-- Dominio module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>dominio</artifactId>
+        </dependency>
+        
+        <!-- Infraestructura module dependency (para acceder a repositorios) -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>infraestructura</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot Starter for service layer -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        
+        <!-- Spring Data JPA for repository access -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        
+        <!-- MapStruct for mapping (optional, can be added later) -->
+        <!--
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+        -->
+    </dependencies>
+    
+    <!-- Build Configuration -->
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                </includes>
+                <excludes>
+                    <exclude>pom.xml</exclude>
+                    <exclude>target/**</exclude>
+                    <exclude>src/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+</project>

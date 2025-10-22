@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Parent Project -->
+    <parent>
+        <groupId>festivos</groupId>
+        <artifactId>api-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <!-- Module Information -->
+    <artifactId>presentacion</artifactId>
+    <packaging>jar</packaging>
+    <name>Presentación - Controllers REST</name>
+    <description>Módulo de presentación con controladores REST y configuración Spring Boot</description>
+    
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- Core module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        
+        <!-- Aplicacion module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>aplicacion</artifactId>
+        </dependency>
+        
+        <!-- Infraestructura module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>infraestructura</artifactId>
+        </dependency>
+        
+        <!-- Dominio module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>dominio</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot Actuator for monitoring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <!-- Build Configuration -->
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                </includes>
+                <excludes>
+                    <exclude>pom.xml</exclude>
+                    <exclude>target/**</exclude>
+                    <exclude>src/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- Spring Boot Maven Plugin - Solo en el módulo que contiene la aplicación principal -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

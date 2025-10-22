@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Parent Project -->
+    <parent>
+        <groupId>festivos</groupId>
+        <artifactId>api-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <!-- Module Information -->
+    <artifactId>infraestructura</artifactId>
+    <packaging>jar</packaging>
+    <name>Infraestructura - Repositorios y Configuración</name>
+    <description>Módulo de infraestructura con repositorios JPA y configuraciones</description>
+    
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- Core module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        
+        <!-- Dominio module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>dominio</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot Data JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        
+        <!-- H2 Database -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- Spring Boot Configuration Processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    
+    <!-- Build Configuration -->
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                </includes>
+                <excludes>
+                    <exclude>pom.xml</exclude>
+                    <exclude>target/**</exclude>
+                    <exclude>src/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+</project>

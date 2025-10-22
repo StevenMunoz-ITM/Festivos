@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Parent Project -->
+    <parent>
+        <groupId>festivos</groupId>
+        <artifactId>api-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <!-- Module Information -->
+    <artifactId>core</artifactId>
+    <packaging>jar</packaging>
+    <name>Core - Interfaces y Puertos</name>
+    <description>Módulo core con interfaces de servicios y puertos de la arquitectura hexagonal</description>
+    
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- Dominio module dependency -->
+        <dependency>
+            <groupId>festivos</groupId>
+            <artifactId>dominio</artifactId>
+        </dependency>
+        
+        <!-- Spring Framework Core for dependency injection annotations -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+    </dependencies>
+    
+    <!-- Build Configuration -->
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                </includes>
+                <excludes>
+                    <exclude>pom.xml</exclude>
+                    <exclude>target/**</exclude>
+                    <exclude>src/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+</project>
