@@ -9,9 +9,6 @@ import festivos.api.infraestructura.repositorios.TipoFestivoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * Mapper para convertir entre Festivo y FestivoDTO
- */
 @Component
 public class FestivoMapper {
     
@@ -20,12 +17,7 @@ public class FestivoMapper {
     
     @Autowired
     private TipoFestivoRepository tipoFestivoRepository;
-    
-    /**
-     * Convierte una entidad Festivo a un DTO
-     * @param festivo Entidad Festivo
-     * @return DTO FestivoDTO
-     */
+
     public FestivoDTO toDTO(Festivo festivo) {
         if (festivo == null) {
             return null;
@@ -50,12 +42,7 @@ public class FestivoMapper {
         
         return dto;
     }
-    
-    /**
-     * Convierte un DTO FestivoDTO a una entidad
-     * @param festivoDTO DTO FestivoDTO
-     * @return Entidad Festivo
-     */
+
     public Festivo toEntity(FestivoDTO festivoDTO) {
         if (festivoDTO == null) {
             return null;

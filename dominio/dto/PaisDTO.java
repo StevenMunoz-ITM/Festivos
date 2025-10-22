@@ -3,9 +3,6 @@ package festivos.api.dominio.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * DTO para transferencia de datos de País
- */
 public class PaisDTO {
     
     private Long id;

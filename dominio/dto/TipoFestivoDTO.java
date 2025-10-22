@@ -3,9 +3,6 @@ package festivos.api.dominio.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * DTO para transferencia de datos de Tipo de Festivo
- */
 public class TipoFestivoDTO {
     
     private Long id;

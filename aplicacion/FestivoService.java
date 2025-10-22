@@ -31,11 +31,7 @@ public class FestivoService implements IFestivoService {
     
     @Autowired
     private FestivoMapper festivoMapper;
-    
-    /**
-     * Obtiene todos los festivos
-     * @return Lista de todos los festivos como DTOs
-     */
+
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerTodos() {
@@ -43,24 +39,14 @@ public class FestivoService implements IFestivoService {
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtiene un festivo por su ID
-     * @param id ID del festivo
-     * @return Festivo encontrado como DTO
-     */
+
     @Override
     @Transactional(readOnly = true)
     public Optional<FestivoDTO> obtenerPorId(Long id) {
         return festivoRepository.findById(id)
                 .map(festivoMapper::toDTO);
     }
-    
-    /**
-     * Obtiene todos los festivos de un país específico
-     * @param paisId ID del país
-     * @return Lista de festivos del país como DTOs
-     */
+
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerPorPais(Long paisId) {
@@ -68,13 +54,7 @@ public class FestivoService implements IFestivoService {
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtiene festivos por día y mes específicos
-     * @param dia Día del festivo
-     * @param mes Mes del festivo
-     * @return Lista de festivos en la fecha especificada como DTOs
-     */
+
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerPorFecha(Integer dia, Integer mes) {
@@ -82,13 +62,7 @@ public class FestivoService implements IFestivoService {
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtiene festivos de un país en un mes específico
-     * @param paisId ID del país
-     * @param mes Mes del festivo
-     * @return Lista de festivos del país en el mes especificado como DTOs
-     */
+
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerPorPaisYMes(Long paisId, Integer mes) {
@@ -96,11 +70,7 @@ public class FestivoService implements IFestivoService {
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtiene festivos que se calculan en base a Pascua
-     * @return Lista de festivos basados en Pascua como DTOs
-     */
+
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerFestivosPascua() {
@@ -108,12 +78,7 @@ public class FestivoService implements IFestivoService {
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtiene festivos de un país que se calculan en base a Pascua
-     * @param paisId ID del país
-     * @return Lista de festivos del país basados en Pascua como DTOs
-     */
+
     @Override
     @Transactional(readOnly = true)
     public List<FestivoDTO> obtenerFestivosPascuaPorPais(Long paisId) {
@@ -121,13 +86,7 @@ public class FestivoService implements IFestivoService {
                 .map(festivoMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Guarda un nuevo festivo
-     * @param festivoDTO DTO del festivo a guardar
-     * @return Festivo guardado como DTO
-     * @throws IllegalArgumentException si los datos son inválidos
-     */
+
     @Override
     public FestivoDTO guardar(FestivoDTO festivoDTO) {
         Festivo festivo = festivoMapper.toEntity(festivoDTO);
@@ -135,14 +94,7 @@ public class FestivoService implements IFestivoService {
         Festivo festivoGuardado = festivoRepository.save(festivo);
         return festivoMapper.toDTO(festivoGuardado);
     }
-    
-    /**
-     * Actualiza un festivo existente
-     * @param id ID del festivo a actualizar
-     * @param festivoDTO DTO con los datos actualizados del festivo
-     * @return Festivo actualizado como DTO
-     * @throws IllegalArgumentException si el festivo no existe o los datos son inválidos
-     */
+
     @Override
     public FestivoDTO actualizar(Long id, FestivoDTO festivoDTO) {
         Festivo festivoExistente = festivoRepository.findById(id)
@@ -161,25 +113,12 @@ public class FestivoService implements IFestivoService {
         Festivo festivoSaved = festivoRepository.save(festivoExistente);
         return festivoMapper.toDTO(festivoSaved);
     }
-    
-    /**
-     * Guarda un nuevo festivo (versión para compatibilidad interna)
-     * @param festivo Festivo a guardar
-     * @return Festivo guardado
-     * @throws IllegalArgumentException si los datos son inválidos
-     */
+
     public Festivo guardar(Festivo festivo) {
         validarFestivo(festivo);
         return festivoRepository.save(festivo);
     }
-    
-    /**
-     * Actualiza un festivo existente (versión para compatibilidad interna)
-     * @param id ID del festivo a actualizar
-     * @param festivoActualizado Datos actualizados del festivo
-     * @return Festivo actualizado
-     * @throws IllegalArgumentException si el festivo no existe o los datos son inválidos
-     */
+
     public Festivo actualizar(Long id, Festivo festivoActualizado) {
         Festivo festivoExistente = festivoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Festivo no encontrado con ID: " + id));
@@ -195,12 +134,7 @@ public class FestivoService implements IFestivoService {
         
         return festivoRepository.save(festivoExistente);
     }
-    
-    /**
-     * Elimina un festivo por su ID
-     * @param id ID del festivo a eliminar
-     * @throws IllegalArgumentException si el festivo no existe
-     */
+
     @Override
     public void eliminar(Long id) {
         if (!festivoRepository.existsById(id)) {
@@ -208,13 +142,7 @@ public class FestivoService implements IFestivoService {
         }
         festivoRepository.deleteById(id);
     }
-    
-    /**
-     * Verifica si una fecha es festivo en un país específico
-     * @param fecha Fecha a verificar
-     * @param paisId ID del país
-     * @return true si es festivo, false si no
-     */
+
     @Override
     @Transactional(readOnly = true)
     public boolean esFestivo(LocalDate fecha, Long paisId) {
@@ -230,13 +158,7 @@ public class FestivoService implements IFestivoService {
         
         return false;
     }
-    
-    /**
-     * Calcula la fecha real de un festivo para un año específico
-     * @param festivo Festivo a calcular
-     * @param año Año para el cual calcular la fecha
-     * @return Fecha calculada del festivo
-     */
+
     public LocalDate calcularFechaFestivo(Festivo festivo, int año) {
         LocalDate fechaBase;
         
@@ -260,12 +182,7 @@ public class FestivoService implements IFestivoService {
         
         return fechaBase;
     }
-    
-    /**
-     * Traslada una fecha al siguiente lunes si no cae en lunes
-     * @param fecha Fecha original
-     * @return Fecha trasladada al siguiente lunes
-     */
+
     private LocalDate trasladarAlSiguienteLunes(LocalDate fecha) {
         // Si ya es lunes, no se traslada
         if (fecha.getDayOfWeek().getValue() == 1) { // 1 = lunes
@@ -276,13 +193,7 @@ public class FestivoService implements IFestivoService {
         int diasHastaLunes = 8 - fecha.getDayOfWeek().getValue();
         return fecha.plusDays(diasHastaLunes);
     }
-    
-    /**
-     * Obtiene la fecha real de celebración de un festivo para un año específico
-     * @param festivoId ID del festivo
-     * @param año Año para calcular la fecha
-     * @return Fecha de celebración del festivo
-     */
+
     @Override
     @Transactional(readOnly = true)
     public LocalDate obtenerFechaCelebracion(Long festivoId, int año) {
@@ -291,13 +202,7 @@ public class FestivoService implements IFestivoService {
         
         return calcularFechaFestivo(festivo, año);
     }
-    
-    /**
-     * Calcula la fecha de Pascua para un año específico usando la fórmula colombiana
-     * Esta fórmula calcula el Domingo de Ramos y luego suma 7 días para obtener Pascua
-     * @param año Año para calcular Pascua
-     * @return Fecha de Pascua (Domingo de Resurrección)
-     */
+
     private LocalDate calcularPascua(int año) {
         // Fórmula colombiana para calcular el Domingo de Ramos
         int a = año % 19;
@@ -317,12 +222,7 @@ public class FestivoService implements IFestivoService {
         // Domingo de Pascua es 7 días después del Domingo de Ramos
         return domingoDeRamos.plusDays(7);
     }
-    
-    /**
-     * Calcula la fecha del Domingo de Ramos para un año específico
-     * @param año Año para calcular el Domingo de Ramos
-     * @return Fecha del Domingo de Ramos (inicio de Semana Santa)
-     */
+
     @Override
     public LocalDate calcularDomingoDeRamos(int año) {
         // Fórmula colombiana para calcular el Domingo de Ramos
@@ -340,12 +240,7 @@ public class FestivoService implements IFestivoService {
         // Sumar los días calculados para obtener Domingo de Ramos
         return fechaBase.plusDays(dias);
     }
-    
-    /**
-     * Valida los datos de un festivo
-     * @param festivo Festivo a validar
-     * @throws IllegalArgumentException si los datos son inválidos
-     */
+
     private void validarFestivo(Festivo festivo) {
         if (festivo.getPais() == null || !paisRepository.existsById(festivo.getPais().getId())) {
             throw new IllegalArgumentException("País inválido o no existe");

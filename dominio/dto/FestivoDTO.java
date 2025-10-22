@@ -3,9 +3,6 @@ package festivos.api.dominio.dto;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
-/**
- * DTO para transferencia de datos de Festivo
- */
 public class FestivoDTO {
     
     private Long id;
