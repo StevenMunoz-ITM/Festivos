@@ -73,12 +73,13 @@ public class FestivoController {
     }
 
     @GetMapping("/es-festivo")
-    public ResponseEntity<Boolean> esFestivo(
+    public ResponseEntity<String> esFestivo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam Long paisId) {
         try {
             boolean esFestivo = festivoService.esFestivo(fecha, paisId);
-            return ResponseEntity.ok(esFestivo);
+            String mensaje = esFestivo ? "Es festivo" : "No es festivo";
+            return ResponseEntity.ok(mensaje);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -94,10 +95,10 @@ public class FestivoController {
         }
     }
 
-    @GetMapping("/domingo-ramos/{año}")
-    public ResponseEntity<LocalDate> obtenerDomingoDeRamos(@PathVariable int año) {
+    @GetMapping("/domingo-ramos")
+    public ResponseEntity<LocalDate> obtenerDomingoDeRamos(@RequestParam int anio) {
         try {
-            LocalDate domingoRamos = festivoService.calcularDomingoDeRamos(año);
+            LocalDate domingoRamos = festivoService.calcularDomingoDeRamos(anio);
             return ResponseEntity.ok(domingoRamos);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
