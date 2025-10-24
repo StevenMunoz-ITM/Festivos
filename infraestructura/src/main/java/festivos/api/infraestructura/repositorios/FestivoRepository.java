@@ -3,6 +3,7 @@ package festivos.api.infraestructura.repositorios;
 import festivos.api.dominio.entidades.Festivo;
 import festivos.api.dominio.entidades.TipoFestivo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public interface FestivoRepository extends JpaRepository<Festivo, Long> {
     List<Festivo> findByDiasPascua(Integer diasPascua);
     List<Festivo> findByPaisIdAndTipoFestivoId(Long paisId, Long tipoFestivoId);
     List<Festivo> findByNombreContainingIgnoreCase(String nombre);
+    
+    @Query("SELECT f FROM Festivo f WHERE f.nombre LIKE '%' || ?1 || '%' ORDER BY f.nombre ASC")
+    List<Festivo> buscar(String nombre);
+    
     boolean existsByPaisIdAndNombreIgnoreCase(Long paisId, String nombre);
     boolean existsByDiaAndMes(Integer dia, Integer mes);
 }

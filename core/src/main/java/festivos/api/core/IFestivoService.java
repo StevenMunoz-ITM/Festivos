@@ -21,6 +21,8 @@ public interface IFestivoService {
 
     List<FestivoDTO> obtenerFestivosPascuaPorPais(Long paisId);
 
+    List<FestivoDTO> buscar(String nombre);
+
     FestivoDTO guardar(FestivoDTO festivoDTO);
 
     FestivoDTO actualizar(Long id, FestivoDTO festivoDTO);

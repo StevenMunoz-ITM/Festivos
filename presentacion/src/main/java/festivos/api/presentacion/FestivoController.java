@@ -73,4 +73,19 @@ public class FestivoController extends BaseController<FestivoDTO, Long> {
     public ResponseEntity<LocalDate> obtenerDomingoDeRamos(@RequestParam int anio) {
         return ejecutarOperacionConManejadorErrores(() -> festivoService.calcularDomingoDeRamos(anio));
     }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<FestivoDTO>> buscar(@RequestParam String nombre) {
+        return obtenerTodos(festivoService.buscar(nombre));
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<FestivoDTO>> listar() {
+        return obtenerTodos();
+    }
+
+    @GetMapping("/obtener/{id}")
+    public ResponseEntity<FestivoDTO> obtener(@PathVariable Long id) {
+        return obtenerPorId(id);
+    }
 }

@@ -105,6 +105,12 @@ public class FestivoService extends BaseService<Festivo, FestivoDTO, Long> imple
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<FestivoDTO> buscar(String nombre) {
+        return festivoMapper.toDTOList(festivoRepository.buscar(nombre));
+    }
+
+    @Override
     public FestivoDTO guardar(FestivoDTO festivoDTO) {
         Festivo festivo = festivoMapper.toEntity(festivoDTO);
         validarFestivo(festivo);

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/paises")
 @CrossOrigin(origins = "*")
@@ -23,5 +25,15 @@ public class PaisController extends BaseController<PaisDTO, Long> {
     @GetMapping("/nombre/{nombre}")
     public ResponseEntity<PaisDTO> obtenerPorNombre(@PathVariable String nombre) {
         return obtenerPorId(paisService.obtenerPorNombre(nombre));
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<PaisDTO>> listar() {
+        return obtenerTodos();
+    }
+
+    @GetMapping("/obtener/{id}")
+    public ResponseEntity<PaisDTO> obtener(@PathVariable Long id) {
+        return obtenerPorId(id);
     }
 }
