@@ -4,7 +4,6 @@ import festivos.api.core.IPaisService;
 import festivos.api.dominio.dto.PaisDTO;
 import festivos.api.dominio.entidades.Pais;
 import festivos.api.infraestructura.repositorios.PaisRepository;
-import festivos.api.aplicacion.mapper.PaisMapper;
 import festivos.api.aplicacion.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,15 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPaisService {
     
     @Autowired
     private PaisRepository paisRepository;
-    
-    @Autowired
-    private PaisMapper paisMapper;
 
     @Autowired
     private ValidationUtils validationUtils;
@@ -33,27 +30,29 @@ public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPa
 
     @Override
     protected Object getMapper() {
-        return paisMapper;
+        return this; // Retornamos this ya que tenemos métodos de conversión locales
     }
 
     @Override
     protected PaisDTO mapToDTO(Pais entity) {
-        return paisMapper.toDTO(entity);
+        return convertToDTO(entity);
     }
 
     @Override
     protected Pais mapToEntity(PaisDTO dto) {
-        return paisMapper.toEntity(dto);
+        return convertToEntity(dto);
     }
 
     @Override
     protected List<PaisDTO> mapToDTOList(List<Pais> entities) {
-        return paisMapper.toDTOList(entities);
+        return convertToDTOList(entities);
     }
 
     @Override
     protected void updateEntityFromDTO(Pais entity, PaisDTO dto) {
-        paisMapper.updateEntity(entity, dto);
+        if (dto.getNombre() != null) {
+            entity.setNombre(dto.getNombre());
+        }
     }
 
     @Override
@@ -65,7 +64,7 @@ public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPa
     @Transactional(readOnly = true)
     public Optional<PaisDTO> obtenerPorNombre(String nombre) {
         return paisRepository.findByNombreIgnoreCase(nombre)
-                .map(paisMapper::toDTO);
+                .map(this::convertToDTO);
     }
 
     @Override
@@ -100,5 +99,32 @@ public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPa
             "un país",
             Pais::getId
         );
+    }
+
+    // Métodos de conversión manual
+    private PaisDTO convertToDTO(Pais pais) {
+        if (pais == null) return null;
+        
+        PaisDTO dto = new PaisDTO();
+        dto.setId(pais.getId());
+        dto.setNombre(pais.getNombre());
+        return dto;
+    }
+
+    private Pais convertToEntity(PaisDTO dto) {
+        if (dto == null) return null;
+        
+        Pais pais = new Pais();
+        pais.setId(dto.getId());
+        pais.setNombre(dto.getNombre());
+        return pais;
+    }
+
+    private List<PaisDTO> convertToDTOList(List<Pais> paises) {
+        if (paises == null) return null;
+        
+        return paises.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 }

@@ -4,7 +4,6 @@ import festivos.api.core.ITipoFestivoService;
 import festivos.api.dominio.dto.TipoFestivoDTO;
 import festivos.api.dominio.entidades.TipoFestivo;
 import festivos.api.infraestructura.repositorios.TipoFestivoRepository;
-import festivos.api.aplicacion.mapper.TipoFestivoMapper;
 import festivos.api.aplicacion.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,15 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO, Long> implements ITipoFestivoService {
     
     @Autowired
     private TipoFestivoRepository tipoFestivoRepository;
-    
-    @Autowired
-    private TipoFestivoMapper tipoFestivoMapper;
 
     @Autowired
     private ValidationUtils validationUtils;
@@ -31,29 +28,58 @@ public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO,
         return tipoFestivoRepository;
     }
 
+    // Métodos de conversión manual para reemplazar el mapper
+    private TipoFestivoDTO convertToDTO(TipoFestivo entity) {
+        if (entity == null) return null;
+        
+        TipoFestivoDTO dto = new TipoFestivoDTO();
+        dto.setId(entity.getId());
+        dto.setTipo(entity.getTipo());
+        return dto;
+    }
+
+    private TipoFestivo convertToEntity(TipoFestivoDTO dto) {
+        if (dto == null) return null;
+        
+        TipoFestivo entity = new TipoFestivo();
+        entity.setId(dto.getId());
+        entity.setTipo(dto.getTipo());
+        return entity;
+    }
+
+    private List<TipoFestivoDTO> convertToDTOList(List<TipoFestivo> entities) {
+        if (entities == null) return null;
+        
+        return entities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     @Override
     protected Object getMapper() {
-        return tipoFestivoMapper;
+        return this; // Retornamos this ya que tenemos métodos de conversión locales
     }
 
     @Override
     protected TipoFestivoDTO mapToDTO(TipoFestivo entity) {
-        return tipoFestivoMapper.toDTO(entity);
+        return convertToDTO(entity);
     }
 
     @Override
     protected TipoFestivo mapToEntity(TipoFestivoDTO dto) {
-        return tipoFestivoMapper.toEntity(dto);
+        return convertToEntity(dto);
     }
 
     @Override
     protected List<TipoFestivoDTO> mapToDTOList(List<TipoFestivo> entities) {
-        return tipoFestivoMapper.toDTOList(entities);
+        return convertToDTOList(entities);
     }
 
     @Override
     protected void updateEntityFromDTO(TipoFestivo entity, TipoFestivoDTO dto) {
-        entity.setTipo(dto.getTipo());
+        if (dto.getTipo() != null) {
+            entity.setTipo(dto.getTipo());
+        }
     }
 
     @Override
@@ -65,7 +91,7 @@ public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO,
     @Transactional(readOnly = true)
     public Optional<TipoFestivoDTO> obtenerPorTipo(String tipo) {
         return tipoFestivoRepository.findByTipoIgnoreCase(tipo)
-                .map(tipoFestivoMapper::toDTO);
+                .map(this::convertToDTO);
     }
 
     @Override
