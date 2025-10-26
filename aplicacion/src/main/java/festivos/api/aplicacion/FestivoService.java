@@ -38,7 +38,7 @@ public class FestivoService extends BaseService<Festivo, FestivoDTO, Long> imple
 
     @Override
     protected Object getMapper() {
-        return this; // Retornamos this ya que tenemos métodos de conversión locales
+        return this; 
     }
 
     @Override
@@ -69,13 +69,13 @@ public class FestivoService extends BaseService<Festivo, FestivoDTO, Long> imple
     protected void updateEntityFromDTO(final Festivo entity, final FestivoDTO dto) {
         // Buscar y asignar el país
         if (dto.getPaisId() != null) {
-            entity.setPais(paisRepository.findById(dto.getPaisId())
+            entity.setPais(this.paisRepository.findById(dto.getPaisId())
                     .orElseThrow(() -> new IllegalArgumentException("País no encontrado con ID: " + dto.getPaisId())));
         }
         
         // Buscar y asignar el tipo de festivo
         if (dto.getTipoFestivoId() != null) {
-            entity.setTipoFestivo(tipoFestivoRepository.findById(dto.getTipoFestivoId())
+            entity.setTipoFestivo(this.tipoFestivoRepository.findById(dto.getTipoFestivoId())
                     .orElseThrow(() -> new IllegalArgumentException("Tipo de festivo no encontrado con ID: " + dto.getTipoFestivoId())));
         }
         
@@ -258,11 +258,10 @@ public class FestivoService extends BaseService<Festivo, FestivoDTO, Long> imple
         }
     }
 
-    // Métodos de conversión manual (reemplazan al FestivoMapper)
-    private FestivoDTO convertToDTO(Festivo festivo) {
+    private FestivoDTO convertToDTO(final Festivo festivo) {
         if (festivo == null) return null;
         
-        FestivoDTO dto = new FestivoDTO();
+        final FestivoDTO dto = new FestivoDTO();
         dto.setId(festivo.getId());
         dto.setNombre(festivo.getNombre());
         dto.setDia(festivo.getDia());
@@ -282,10 +281,10 @@ public class FestivoService extends BaseService<Festivo, FestivoDTO, Long> imple
         return dto;
     }
 
-    private Festivo convertToEntity(FestivoDTO dto) {
+    private Festivo convertToEntity(final FestivoDTO dto) {
         if (dto == null) return null;
         
-        Festivo festivo = new Festivo();
+        final Festivo festivo = new Festivo();
         festivo.setId(dto.getId());
         festivo.setNombre(dto.getNombre());
         festivo.setDia(dto.getDia());
@@ -295,7 +294,7 @@ public class FestivoService extends BaseService<Festivo, FestivoDTO, Long> imple
         return festivo;
     }
 
-    private List<FestivoDTO> convertToDTOList(List<Festivo> festivos) {
+    private List<FestivoDTO> convertToDTOList(final List<Festivo> festivos) {
         if (festivos == null) return null;
         
         return festivos.stream()

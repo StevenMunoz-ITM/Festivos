@@ -25,31 +25,31 @@ public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPa
 
     @Override
     protected JpaRepository<Pais, Long> getRepository() {
-        return paisRepository;
+        return this.paisRepository;
     }
 
     @Override
     protected Object getMapper() {
-        return this; // Retornamos this ya que tenemos métodos de conversión locales
+        return this; 
     }
 
     @Override
-    protected PaisDTO mapToDTO(Pais entity) {
-        return convertToDTO(entity);
+    protected PaisDTO mapToDTO(final Pais entity) {
+        return this.convertToDTO(entity);
     }
 
     @Override
-    protected Pais mapToEntity(PaisDTO dto) {
-        return convertToEntity(dto);
+    protected Pais mapToEntity(final PaisDTO dto) {
+        return this.convertToEntity(dto);
     }
 
     @Override
-    protected List<PaisDTO> mapToDTOList(List<Pais> entities) {
-        return convertToDTOList(entities);
+    protected List<PaisDTO> mapToDTOList(final List<Pais> entities) {
+        return this.convertToDTOList(entities);
     }
 
     @Override
-    protected void updateEntityFromDTO(Pais entity, PaisDTO dto) {
+    protected void updateEntityFromDTO(final Pais entity, final PaisDTO dto) {
         if (dto.getNombre() != null) {
             entity.setNombre(dto.getNombre());
         }
@@ -62,37 +62,37 @@ public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPa
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<PaisDTO> obtenerPorNombre(String nombre) {
-        return paisRepository.findByNombreIgnoreCase(nombre)
+    public Optional<PaisDTO> obtenerPorNombre(final String nombre) {
+        return this.paisRepository.findByNombreIgnoreCase(nombre)
                 .map(this::convertToDTO);
     }
 
     @Override
-    public PaisDTO guardar(PaisDTO paisDTO) {
-        validarPaisUnico(paisDTO.getNombre(), null);
+    public PaisDTO guardar(final PaisDTO paisDTO) {
+        this.validarPaisUnico(paisDTO.getNombre(), null);
         return super.guardar(paisDTO);
     }
 
     @Override
-    public PaisDTO actualizar(Long id, PaisDTO paisDTO) {
-        validarPaisUnico(paisDTO.getNombre(), id);
+    public PaisDTO actualizar(final Long id, final PaisDTO paisDTO) {
+        this.validarPaisUnico(paisDTO.getNombre(), id);
         return super.actualizar(id, paisDTO);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorNombre(String nombre) {
-        return paisRepository.existsByNombreIgnoreCase(nombre);
+    public boolean existePorNombre(final String nombre) {
+        return this.paisRepository.existsByNombreIgnoreCase(nombre);
     }
     
     @Transactional(readOnly = true)
-    public Optional<Pais> obtenerEntidadPorId(Long id) {
-        return paisRepository.findById(id);
+    public Optional<Pais> obtenerEntidadPorId(final Long id) {
+        return this.paisRepository.findById(id);
     }
 
-    private void validarPaisUnico(String nombre, Long idExcluir) {
-        validationUtils.validarEntidadUnica(
-            paisRepository::findByNombreIgnoreCase,
+    private void validarPaisUnico(final String nombre, final Long idExcluir) {
+        this.validationUtils.validarEntidadUnica(
+            this.paisRepository::findByNombreIgnoreCase,
             nombre,
             idExcluir,
             "el nombre",
@@ -102,25 +102,25 @@ public class PaisService extends BaseService<Pais, PaisDTO, Long> implements IPa
     }
 
     // Métodos de conversión manual
-    private PaisDTO convertToDTO(Pais pais) {
+    private PaisDTO convertToDTO(final Pais pais) {
         if (pais == null) return null;
         
-        PaisDTO dto = new PaisDTO();
+        final PaisDTO dto = new PaisDTO();
         dto.setId(pais.getId());
         dto.setNombre(pais.getNombre());
         return dto;
     }
 
-    private Pais convertToEntity(PaisDTO dto) {
+    private Pais convertToEntity(final PaisDTO dto) {
         if (dto == null) return null;
         
-        Pais pais = new Pais();
+        final Pais pais = new Pais();
         pais.setId(dto.getId());
         pais.setNombre(dto.getNombre());
         return pais;
     }
 
-    private List<PaisDTO> convertToDTOList(List<Pais> paises) {
+    private List<PaisDTO> convertToDTOList(final List<Pais> paises) {
         if (paises == null) return null;
         
         return paises.stream()

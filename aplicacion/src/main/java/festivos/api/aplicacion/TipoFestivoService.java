@@ -25,29 +25,28 @@ public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO,
 
     @Override
     protected JpaRepository<TipoFestivo, Long> getRepository() {
-        return tipoFestivoRepository;
+        return this.tipoFestivoRepository;
     }
 
-    // Métodos de conversión manual para reemplazar el mapper
-    private TipoFestivoDTO convertToDTO(TipoFestivo entity) {
+    private TipoFestivoDTO convertToDTO(final TipoFestivo entity) {
         if (entity == null) return null;
         
-        TipoFestivoDTO dto = new TipoFestivoDTO();
+        final TipoFestivoDTO dto = new TipoFestivoDTO();
         dto.setId(entity.getId());
         dto.setTipo(entity.getTipo());
         return dto;
     }
 
-    private TipoFestivo convertToEntity(TipoFestivoDTO dto) {
+    private TipoFestivo convertToEntity(final TipoFestivoDTO dto) {
         if (dto == null) return null;
         
-        TipoFestivo entity = new TipoFestivo();
+        final TipoFestivo entity = new TipoFestivo();
         entity.setId(dto.getId());
         entity.setTipo(dto.getTipo());
         return entity;
     }
 
-    private List<TipoFestivoDTO> convertToDTOList(List<TipoFestivo> entities) {
+    private List<TipoFestivoDTO> convertToDTOList(final List<TipoFestivo> entities) {
         if (entities == null) return null;
         
         return entities.stream()
@@ -57,26 +56,26 @@ public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO,
 
     @Override
     protected Object getMapper() {
-        return this; // Retornamos this ya que tenemos métodos de conversión locales
+        return this;
     }
 
     @Override
-    protected TipoFestivoDTO mapToDTO(TipoFestivo entity) {
-        return convertToDTO(entity);
+    protected TipoFestivoDTO mapToDTO(final TipoFestivo entity) {
+        return this.convertToDTO(entity);
     }
 
     @Override
-    protected TipoFestivo mapToEntity(TipoFestivoDTO dto) {
-        return convertToEntity(dto);
+    protected TipoFestivo mapToEntity(final TipoFestivoDTO dto) {
+        return this.convertToEntity(dto);
     }
 
     @Override
-    protected List<TipoFestivoDTO> mapToDTOList(List<TipoFestivo> entities) {
-        return convertToDTOList(entities);
+    protected List<TipoFestivoDTO> mapToDTOList(final List<TipoFestivo> entities) {
+        return this.convertToDTOList(entities);
     }
 
     @Override
-    protected void updateEntityFromDTO(TipoFestivo entity, TipoFestivoDTO dto) {
+    protected void updateEntityFromDTO(final TipoFestivo entity, final TipoFestivoDTO dto) {
         if (dto.getTipo() != null) {
             entity.setTipo(dto.getTipo());
         }
@@ -89,37 +88,37 @@ public class TipoFestivoService extends BaseService<TipoFestivo, TipoFestivoDTO,
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<TipoFestivoDTO> obtenerPorTipo(String tipo) {
-        return tipoFestivoRepository.findByTipoIgnoreCase(tipo)
+    public Optional<TipoFestivoDTO> obtenerPorTipo(final String tipo) {
+        return this.tipoFestivoRepository.findByTipoIgnoreCase(tipo)
                 .map(this::convertToDTO);
     }
 
     @Override
-    public TipoFestivoDTO guardar(TipoFestivoDTO tipoFestivoDTO) {
-        validarTipoUnico(tipoFestivoDTO.getTipo(), null);
+    public TipoFestivoDTO guardar(final TipoFestivoDTO tipoFestivoDTO) {
+        this.validarTipoUnico(tipoFestivoDTO.getTipo(), null);
         return super.guardar(tipoFestivoDTO);
     }
 
     @Override
-    public TipoFestivoDTO actualizar(Long id, TipoFestivoDTO tipoFestivoDTO) {
-        validarTipoUnico(tipoFestivoDTO.getTipo(), id);
+    public TipoFestivoDTO actualizar(final Long id, final TipoFestivoDTO tipoFestivoDTO) {
+        this.validarTipoUnico(tipoFestivoDTO.getTipo(), id);
         return super.actualizar(id, tipoFestivoDTO);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorTipo(String tipo) {
-        return tipoFestivoRepository.existsByTipoIgnoreCase(tipo);
+    public boolean existePorTipo(final String tipo) {
+        return this.tipoFestivoRepository.existsByTipoIgnoreCase(tipo);
     }
     
     @Transactional(readOnly = true)
-    public Optional<TipoFestivo> obtenerEntidadPorId(Long id) {
-        return tipoFestivoRepository.findById(id);
+    public Optional<TipoFestivo> obtenerEntidadPorId(final Long id) {
+        return this.tipoFestivoRepository.findById(id);
     }
 
-    private void validarTipoUnico(String tipo, Long idExcluir) {
-        validationUtils.validarEntidadUnica(
-            tipoFestivoRepository::findByTipoIgnoreCase,
+    private void validarTipoUnico(final String tipo, final Long idExcluir) {
+        this.validationUtils.validarEntidadUnica(
+            this.tipoFestivoRepository::findByTipoIgnoreCase,
             tipo,
             idExcluir,
             "el tipo",
