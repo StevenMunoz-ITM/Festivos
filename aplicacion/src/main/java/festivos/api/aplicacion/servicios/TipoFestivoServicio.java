@@ -63,26 +63,18 @@ public class TipoFestivoServicio implements ITipoFestivoServicio {
         return new TipoFestivoDto(tipoFestivo.getId(), tipoFestivo.getTipo());
     }
     
-    /**
-     * Lista todos los tipos de festivo como DTOs
-     */
+
     public List<TipoFestivoDto> listarDto() {
         return repositorio.findAll().stream()
                 .map(this::convertirADto)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtiene un tipo de festivo por ID como DTO
-     */
+  
     public TipoFestivoDto obtenerDto(int id) {
         var tipoEncontrado = repositorio.findById(id);
         return tipoEncontrado.isEmpty() ? null : convertirADto(tipoEncontrado.get());
     }
-    
-    /**
-     * Busca tipos de festivo por tipo y retorna DTOs
-     */
+   
     public List<TipoFestivoDto> buscarDto(String tipo) {
         return repositorio.buscar(tipo).stream()
                 .map(this::convertirADto)
