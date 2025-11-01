@@ -18,9 +18,6 @@
 	<modules>
 		<module>dominio</module>
 		<module>infraestructura</module>
-		<module>core</module>
-		<module>aplicacion</module>
-		<module>presentacion</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>
@@ -90,22 +87,18 @@
 					<!-- Orden específico de compilación -->
 					<compilerId>javac</compilerId>
 					<includes>
-						<include>**/ApiApplication.java</include>
 						<include>**/dominio/**/*.java</include>
 						<include>**/infraestructura/**/*.java</include>
-						<include>**/core/**/*.java</include>
-						<include>**/presentacion/**/*.java</include>
-						<include>**/aplicacion/**/*.java</include>
 					</includes>
 				</configuration>
 			</plugin>
 			
-			<!-- Plugin de Spring Boot -->
+			<!-- Plugin de Spring Boot - Deshabilitado para módulos biblioteca -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>festivos.api.ApiApplication</mainClass>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
