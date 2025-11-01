@@ -1,8 +1,13 @@
-HELP.md
+# Maven
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+*.log
+
+# Spring Boot
+*.pid
+*.lock
 
 ### STS ###
 .apt_generated
@@ -31,3 +36,30 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Java
+*.class
+*.jar
+!lib/*.jar
+
+# Gradle
+.gradle
+/gradle/
+
+# Application Properties (production)
+application-prod.properties
+application-production.properties
