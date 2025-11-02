@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.7</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	
+	<groupId>festivos.api</groupId>
+	<artifactId>festivos-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>festivos-api</name>
+	<description>API de Festivos - Proyecto Modular Spring Boot</description>
+	
+	<properties>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+	</properties>
+
+	<modules>
+		<module>dominio</module>
+		<module>core</module>
+		<module>infraestructura</module>
+		<module>aplicacion</module>
+		<module>presentacion</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>festivos.api</groupId>
+				<artifactId>dominio</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>festivos.api</groupId>
+				<artifactId>core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>festivos.api</groupId>
+				<artifactId>infraestructura</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>festivos.api</groupId>
+				<artifactId>aplicacion</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>festivos.api</groupId>
+				<artifactId>presentacion</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>
