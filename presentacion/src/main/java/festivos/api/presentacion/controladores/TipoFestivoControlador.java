@@ -6,7 +6,7 @@ import festivos.api.core.servicios.ITipoFestivoServicio;
 import festivos.api.dominio.entidades.TipoFestivo;
 
 @RestController
-@RequestMapping("/api/tipofestivos")
+@RequestMapping("/api/tipos-festivos")
 @CrossOrigin(origins = "*")
 public class TipoFestivoControlador {
     
